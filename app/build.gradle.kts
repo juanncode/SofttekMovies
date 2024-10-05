@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -25,7 +27,22 @@ android {
     }
 
     buildTypes {
+        val keystoreFile = project.rootProject.file("keys.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+        debug {
+            val baseUrl = properties.getProperty("BASE_URL") ?: ""
+            val tokenMovies = properties.getProperty("TOKEN_MOVIES") ?: ""
+
+            buildConfigField(type = "String", name = "BASE_URL", value = baseUrl)
+            buildConfigField(type = "String", name = "TOKEN_MOVIES", value = tokenMovies)
+        }
         release {
+            val baseUrl = properties.getProperty("BASE_URL") ?: ""
+            val tokenMovies = properties.getProperty("TOKEN_MOVIES") ?: ""
+
+            buildConfigField(type = "String", name = "BASE_URL", value = baseUrl)
+            buildConfigField(type = "String", name = "TOKEN_MOVIES", value = tokenMovies)
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -42,6 +59,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -54,6 +72,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
