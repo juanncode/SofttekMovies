@@ -1,4 +1,5 @@
-package com.github.juanncode.softtekmovies.screens.home.components
+package com.github.juanncode.softtekmovies.screens.detail.components
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,16 +28,12 @@ import com.github.juanncode.domain.Movie
 import kotlin.math.roundToInt
 
 @Composable
-fun MovieItem(
+fun MovieDetailItem(
     movie: Movie,
-    onClickListener: (Long) -> Unit,
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(330.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable { onClickListener(movie.id) },
+            .fillMaxSize(),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -62,7 +59,7 @@ fun MovieItem(
                         brush = Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                Color.Black.copy(alpha = 0.4f),
+                                Color.Black.copy(alpha = 0.6f),
                                 Color.Black.copy(alpha = 0.9f)
                             )
                         )
@@ -76,6 +73,7 @@ fun MovieItem(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
+                Spacer(modifier = Modifier.height(20.dp))
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(movie.posterPath)
@@ -83,34 +81,39 @@ fun MovieItem(
                         .build(),
                     contentDescription = movie.title,
                     modifier = Modifier
-                        .height(200.dp)
-                        .width(120.dp)
+                        .height(400.dp)
+                        .width(320.dp)
                         .clip(RoundedCornerShape(12.dp)),
                     contentScale = ContentScale.Crop
                 )
 
                 Text(
                     text = movie.title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    RatingBar(
-                        rating = movie.voteAverage,
-                        modifier = Modifier.height(20.dp)
-                    )
+                RatingBar(
+                    rating = movie.voteAverage,
+                    modifier = Modifier.height(20.dp)
+                )
 
-                    Text(
-                        text = String.format("%.1f", movie.voteAverage),
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                }
+                Text(
+                    text = movie.releaseDate,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Text(
+                    text = movie.overview,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
     }
@@ -147,9 +150,9 @@ fun RatingBar(
 
 @Preview(showBackground = true)
 @Composable
-fun MovieItemPreview() {
+fun MovieDetailItemPreview() {
     MaterialTheme {
-        MovieItem(
+        MovieDetailItem(
             movie = Movie(
                 id = 1,
                 title = "Spider-Man: Across the Spider-Verse",
@@ -159,7 +162,6 @@ fun MovieItemPreview() {
                 releaseDate = "2023-06-01",
                 page = 1
             ),
-            onClickListener = {}
         )
     }
 }

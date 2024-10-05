@@ -32,9 +32,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.github.juanncode.domain.Movie
 import com.github.juanncode.softtekmovies.R
+import com.github.juanncode.softtekmovies.config.AppRouter
 import com.github.juanncode.softtekmovies.screens.components.GradientBackground
+import com.github.juanncode.softtekmovies.screens.home.components.MovieItem
 import com.github.juanncode.softtekmovies.screens.home.components.SofttekToolbar
 import com.github.juanncode.softtekmovies.ui.theme.SofttekMoviesTheme
 
@@ -44,7 +48,7 @@ private val columns = 2
 fun HomeScreen(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
-
+    navController: NavController
 ) {
     val context = LocalContext.current
     val listState = rememberLazyGridState()
@@ -98,8 +102,10 @@ fun HomeScreen(
                 }
                 items(
                     state.movies
-                ) {
-                    com.github.juanncode.softtekmovies.screens.home.components.MovieItem(movie = it)
+                ) { movie ->
+                    MovieItem(movie = movie) {
+                        navController.navigate(AppRouter.DetailRoute(idMovie = movie.id))
+                    }
                 }
 
                 if (state.loading) {
@@ -163,7 +169,8 @@ private fun HomeScreenPreview() {
                     )
                 )
             ),
-            onEvent = {}
+            onEvent = {},
+            navController = rememberNavController()
         )
     }
 

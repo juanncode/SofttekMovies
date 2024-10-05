@@ -9,7 +9,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.github.juanncode.softtekmovies.config.AppRouter
+import com.github.juanncode.softtekmovies.screens.detail.DetailScreen
+import com.github.juanncode.softtekmovies.screens.detail.DetailViewModel
 import com.github.juanncode.softtekmovies.screens.home.HomeScreen
 import com.github.juanncode.softtekmovies.screens.home.HomeViewModel
 import com.github.juanncode.softtekmovies.ui.theme.SofttekMoviesTheme
@@ -34,6 +37,19 @@ class MainActivity : ComponentActivity() {
                             val viewModel = hiltViewModel<HomeViewModel>()
                             HomeScreen(
                                 state = viewModel.state,
+                                onEvent = {
+                                    viewModel.onEvent(it)
+                                },
+                                navController
+                            )
+                        }
+                        composable<AppRouter.DetailRoute> {
+                            val args = it.toRoute<AppRouter.DetailRoute>()
+                            val viewModel = hiltViewModel<DetailViewModel>()
+                            DetailScreen(
+                                idMovie = args.idMovie,
+                                state = viewModel.state,
+                                navController = navController,
                                 onEvent = {
                                     viewModel.onEvent(it)
                                 }

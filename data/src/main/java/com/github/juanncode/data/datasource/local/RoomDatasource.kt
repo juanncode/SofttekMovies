@@ -30,5 +30,9 @@ class RoomDatasource @Inject constructor(
         return movieDatabase.movieDao.getLastPageMovie()
     }
 
+    override suspend fun getMovieById(id: Long): Movie {
+        return movieDatabase.movieDao.getMovieById(id).toDomain()
+    }
+
 
 }

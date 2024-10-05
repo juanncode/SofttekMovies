@@ -13,6 +13,9 @@ interface MovieDao {
     @Query("SELECT * FROM movieentity")
     fun getMoviesByPage(): Flow<List<MovieEntity>>
 
+    @Query("SELECT * FROM movieentity where id = :id")
+    fun getMovieById(id: Long): MovieEntity
+
     @Query("SELECT MAX(page) FROM movieentity")
     fun getLastPageMovie(): Int?
 
