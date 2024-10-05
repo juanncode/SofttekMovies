@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt")
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -55,10 +59,25 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.paging)
+
+    //hilt
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+
+    //coil
+    implementation(libs.coil.compose)
+
+    //serialization
+    implementation(libs.kotlin.serialization)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
