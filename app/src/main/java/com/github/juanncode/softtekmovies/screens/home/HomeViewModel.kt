@@ -10,6 +10,7 @@ import com.github.juanncode.domain.repository.MovieRepository
 import com.github.juanncode.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -41,9 +42,19 @@ class HomeViewModel @Inject constructor(
     fun onEvent(event: HomeEvent) {
         when (event) {
             HomeEvent.CleanError -> state = state.copy(error = null)
+            HomeEvent.GetNewMovies -> fetchMovies()
+            HomeEvent.RefreshMovies -> refreshMovies()
+        }
+    }
 
-            HomeEvent.GetNewMovies -> {
-                fetchMovies()
+    private fun refreshMovies() {
+        viewModelScope.launch {
+            state = state.copy(loading = true)
+            delay(500)
+            val response = withContext(Dispatchers.IO) {repository.refreshMovies()}
+            state = state.copy(loading = false)
+            if (response is Resource.Error) {
+                state = state.copy(error = response.error)
             }
         }
     }

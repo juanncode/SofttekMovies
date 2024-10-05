@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.github.juanncode.softtekmovies.screens.home
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -20,8 +23,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -76,29 +81,43 @@ fun HomeScreen(
         }
     }
 
-    LazyVerticalGrid(
-        state = listState,
-        columns = GridCells.Fixed(count = 3),
-        contentPadding = PaddingValues(horizontal = 5.dp, vertical = 10.dp)
-    ) {
-        items(
-            state.movies
-        ) {
-            MovieItem(movie = it)
+    PullToRefreshBox(
+        isRefreshing = state.loading,
+        onRefresh = {
+            onEvent(HomeEvent.RefreshMovies)
         }
+    ) {
+        LazyVerticalGrid(
+            state = listState,
+            columns = GridCells.Fixed(count = 3),
+            contentPadding = PaddingValues(horizontal = 5.dp, vertical = 10.dp)
+        ) {
+            items(
+                state.movies
+            ) {
+                MovieItem(movie = it)
+            }
 
-        if (state.loading) {
-            item(span = { GridItemSpan(3) }) {
-                Column(
-                    modifier = Modifier.padding(vertical = 15.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "Cargando...", style = TextStyle(fontWeight = FontWeight.SemiBold))
+            if (state.loading) {
+                item(span = { GridItemSpan(3) }) {
+                    Column(
+                        modifier = Modifier.padding(vertical = 15.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CircularProgressIndicator()
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = "Cargando...",
+                            style = TextStyle(fontWeight = FontWeight.SemiBold)
+                        )
+                    }
                 }
             }
+
         }
+
+
+
     }
 
 }
