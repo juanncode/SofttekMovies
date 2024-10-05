@@ -62,6 +62,7 @@ class HomeViewModel @Inject constructor(
     private fun fetchMovies() {
         viewModelScope.launch {
             state = state.copy(loading = true)
+            delay(500)
             val response = withContext(Dispatchers.IO) {repository.fetchMovies()}
             state = state.copy(loading = false)
             if (response is Resource.Error) {
