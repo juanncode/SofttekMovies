@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.paging)
+    implementation(libs.kotlinx.coroutines.core)
 
     //retrofit
     implementation(libs.retrofit)

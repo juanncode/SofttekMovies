@@ -86,7 +86,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.paging)
 
     //hilt
     implementation(libs.hilt)
