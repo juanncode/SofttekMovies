@@ -22,13 +22,13 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
 fun Throwable.toError(): ErrorGeneric = when (this) {
     is IOException -> ErrorGeneric(
         code = 0,
-        message = "Tuvimos un problema de conectividad, por favor revise su conexión a internet y vuelva a intentarlo",
+        userMessage = "Tuvimos un problema de conectividad, por favor revise su conexión a internet y vuelva a intentarlo",
         error = stackTraceToString()
     )
     is HttpException -> ErrorGeneric(
         code = code(),
-        message = message,
+        userMessage = message,
         error = stackTraceToString()
     )
-    else -> ErrorGeneric(code = 0, message = message ?: "", error = stackTraceToString())
+    else -> ErrorGeneric(code = 0, userMessage = message ?: "", error = stackTraceToString())
 }

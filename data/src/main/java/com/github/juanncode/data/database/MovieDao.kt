@@ -9,7 +9,7 @@ interface MovieDao {
     suspend fun upsertAll(beers: List<MovieEntity>)
 
     @Query("SELECT * FROM movieentity where page = :page")
-    fun getMoviesByPage(page: Int): PagingSource<Int, MovieEntity>
+    fun getMoviesByPage(page: Int? = null): PagingSource<Int, MovieEntity>
 
     @Query("DELETE FROM movieentity")
     suspend fun clearAll()
