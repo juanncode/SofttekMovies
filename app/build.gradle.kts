@@ -87,6 +87,10 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.core.splashscreen)
 
+    //navigation
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation)
+
     //hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)

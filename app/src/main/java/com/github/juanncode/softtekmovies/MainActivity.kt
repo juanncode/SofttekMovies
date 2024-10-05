@@ -4,44 +4,44 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.Surface
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.github.juanncode.softtekmovies.config.AppRouter
+import com.github.juanncode.softtekmovies.screens.home.HomeScreen
+import com.github.juanncode.softtekmovies.screens.home.HomeViewModel
 import com.github.juanncode.softtekmovies.ui.theme.SofttekMoviesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SofttekMoviesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+
+                Surface {
+                    NavHost(
+                        navController = navController,
+                        startDestination = AppRouter.HomeRoute,
+
+                        ) {
+                        composable<AppRouter.HomeRoute> {
+                            val viewModel = hiltViewModel<HomeViewModel>()
+                            HomeScreen(
+                                state = viewModel.state,
+                                onEvent = {
+                                    viewModel.onEvent(it)
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SofttekMoviesTheme {
-        Greeting("Android")
     }
 }

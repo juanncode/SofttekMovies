@@ -26,7 +26,8 @@ coroutines = "1.8.1"
 room = "2.6.1"
 coreSplashscreen = "1.0.1"
 pagingVersion = "3.3.2"
-
+pagingComposeVersion = "3.3.2"
+roomPaging = "2.6.1"
 
 
 [libraries]
@@ -45,7 +46,6 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
-androidx-paging = { module = "androidx.paging:paging-runtime", version.ref = "pagingVersion" }
 
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -71,6 +71,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "roomPaging" }
 
 mockito-kotlin = { group = "org.mockito.kotlin", name= "mockito-kotlin", version.ref = "mockitoKotlin" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

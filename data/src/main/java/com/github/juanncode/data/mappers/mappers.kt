@@ -10,7 +10,7 @@ fun MovieRemote.toDatabase(page: Int): MovieEntity = MovieEntity(
     voteAverage,
     releaseDate,
     overview,
-    posterPath,
+    posterPath = "https://image.tmdb.org/t/p/w500$posterPath",
     page = page
 )
 

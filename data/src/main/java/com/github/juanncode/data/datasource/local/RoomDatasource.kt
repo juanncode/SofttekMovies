@@ -1,25 +1,34 @@
 package com.github.juanncode.data.datasource.local
 
-import androidx.paging.LoadType
-import androidx.paging.PagingSource
 import androidx.room.withTransaction
 import com.github.juanncode.data.database.MovieDatabase
-import com.github.juanncode.data.database.MovieEntity
+import com.github.juanncode.data.datasource.remote.model.MovieRemote
+import com.github.juanncode.data.mappers.toDatabase
+import com.github.juanncode.data.mappers.toDomain
+import com.github.juanncode.domain.Movie
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RoomDatasource @Inject constructor(
     private val movieDatabase: MovieDatabase
 ) : LocalDatasource {
-    override suspend fun getMovies(): PagingSource<Int, MovieEntity> {
-        return movieDatabase.movieDao.getMoviesByPage()
+    override fun getMovies(): Flow<List<Movie>> {
+        return movieDatabase.movieDao.getMoviesByPage().map { it.map { it.toDomain() } }
     }
 
-    override suspend fun saveMovies(movies: List<MovieEntity>, loadType: LoadType) {
+    override suspend fun saveMovies(movies: List<MovieRemote>, isRefreshing: Boolean, page: Int) {
         movieDatabase.withTransaction {
-            if(loadType == LoadType.REFRESH) {
+            if(isRefreshing) {
                 movieDatabase.movieDao.clearAll()
             }
-            movieDatabase.movieDao.upsertAll(movies)
+            movieDatabase.movieDao.upsertAll(movies.map { it.toDatabase(page) })
         }
     }
+
+    override suspend fun getLastPageMovie(): Int? {
+        return movieDatabase.movieDao.getLastPageMovie()
+    }
+
+
 }

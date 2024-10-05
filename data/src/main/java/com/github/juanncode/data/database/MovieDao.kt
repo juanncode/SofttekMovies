@@ -1,15 +1,20 @@
 package com.github.juanncode.data.database
 
-import androidx.paging.PagingSource
+import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface MovieDao {
     @Upsert
     suspend fun upsertAll(beers: List<MovieEntity>)
 
-    @Query("SELECT * FROM movieentity where page = :page")
-    fun getMoviesByPage(page: Int? = null): PagingSource<Int, MovieEntity>
+    @Query("SELECT * FROM movieentity")
+    fun getMoviesByPage(): Flow<List<MovieEntity>>
+
+    @Query("SELECT MAX(page) FROM movieentity")
+    fun getLastPageMovie(): Int?
 
     @Query("DELETE FROM movieentity")
     suspend fun clearAll()
