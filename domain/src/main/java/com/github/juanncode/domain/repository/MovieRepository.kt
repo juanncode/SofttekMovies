@@ -8,4 +8,5 @@ interface MovieRepository {
     fun getMoviesFlow(): Flow<List<Movie>>
     suspend fun fetchMovies(): Resource<Unit>
     suspend fun refreshMovies(): Resource<Unit>
+    suspend fun isMoviesEmpty(): Boolean
 }

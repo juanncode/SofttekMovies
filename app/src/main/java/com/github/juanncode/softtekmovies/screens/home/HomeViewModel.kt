@@ -12,10 +12,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -32,9 +32,8 @@ class HomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
 
         viewModelScope.launch {
-            val response = withContext(Dispatchers.IO) {repository.fetchMovies()}
-            if (response is Resource.Error) {
-                state = state.copy(error = response.error)
+            if (withContext(Dispatchers.IO){repository.isMoviesEmpty()}) {
+                fetchMovies()
             }
         }
     }
@@ -42,9 +41,23 @@ class HomeViewModel @Inject constructor(
     fun onEvent(event: HomeEvent) {
         when (event) {
             HomeEvent.CleanError -> state = state.copy(error = null)
+
+            HomeEvent.GetNewMovies -> {
+                fetchMovies()
+            }
         }
     }
 
+    private fun fetchMovies() {
+        viewModelScope.launch {
+            state = state.copy(loading = true)
+            val response = withContext(Dispatchers.IO) {repository.fetchMovies()}
+            state = state.copy(loading = false)
+            if (response is Resource.Error) {
+                state = state.copy(error = response.error)
+            }
+        }
+    }
 
 
 }

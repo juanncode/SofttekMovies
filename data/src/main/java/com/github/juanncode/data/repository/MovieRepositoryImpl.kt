@@ -40,4 +40,8 @@ class MovieRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun isMoviesEmpty(): Boolean {
+        return localDatasource.getLastPageMovie() == null
+    }
 }
