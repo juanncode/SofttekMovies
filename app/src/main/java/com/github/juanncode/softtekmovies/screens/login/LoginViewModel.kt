@@ -20,21 +20,13 @@ class LoginViewModel @Inject constructor(
     private val userDataValidator: UserDataValidator,
 ) : ViewModel() {
     var state by mutableStateOf(LoginState())
-        private set
 
     init {
-        snapshotFlow {
-            state.email.text
-        }.onEach { email ->
-            if (email.isEmpty()) return@onEach
-            val isValidEmail = userDataValidator.isValidEmail(email.toString())
+        validateEmail()
+        validatePassword()
+    }
 
-            state = state.copy(
-                isEmailValid = isValidEmail,
-                canLogin = isValidEmail && state.isPasswordValid
-            )
-        }.launchIn(viewModelScope)
-
+    fun validatePassword() {
         snapshotFlow {
             state.password.text
         }.onEach { password ->
@@ -45,6 +37,20 @@ class LoginViewModel @Inject constructor(
             state = state.copy(
                 isPasswordValid = isValidPassword,
                 canLogin = isValidEmail && isValidPassword
+            )
+        }.launchIn(viewModelScope)
+    }
+
+    fun validateEmail() {
+        snapshotFlow {
+            state.email.text
+        }.onEach { email ->
+            if (email.isEmpty()) return@onEach
+            val isValidEmail = userDataValidator.isValidEmail(email.toString())
+
+            state = state.copy(
+                isEmailValid = isValidEmail,
+                canLogin = isValidEmail && state.isPasswordValid
             )
         }.launchIn(viewModelScope)
     }
