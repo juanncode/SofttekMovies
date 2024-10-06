@@ -8,4 +8,5 @@
     <string name="password">Ingrese su password</string>
     <string name="login">Login</string>
     <string name="must_be_a_valid_email">Debe agregar un email válido</string>
+    <string name="loading">Cargando...</string>
 </resources>

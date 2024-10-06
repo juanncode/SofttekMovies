@@ -1,7 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 
 package com.github.juanncode.softtekmovies.screens.detail
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,11 +16,12 @@ import com.github.juanncode.softtekmovies.screens.detail.components.MovieDetailI
 import com.github.juanncode.softtekmovies.screens.components.SofttekToolbar
 
 @Composable
-fun DetailScreen(
+fun SharedTransitionScope.DetailScreen(
     idMovie: Long,
     onEvent: (DetailEvent) -> Unit,
     state: DetailState,
-    navController: NavController
+    navController: NavController,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
 
     LaunchedEffect(key1 = true) {
@@ -35,7 +39,11 @@ fun DetailScreen(
                         navController.popBackStack()
                     }
                 )
-                MovieDetailItem(movie = state.movie)
+                MovieDetailItem(
+                    movie = state.movie,
+                    sharedTransitionScope = this@DetailScreen,
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
             }
         }
     }

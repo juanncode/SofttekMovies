@@ -1,8 +1,11 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 
 package com.github.juanncode.softtekmovies.screens.home
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -45,10 +48,11 @@ import com.github.juanncode.softtekmovies.ui.theme.SofttekMoviesTheme
 private val columns = 2
 
 @Composable
-fun HomeScreen(
+fun SharedTransitionScope.HomeScreen(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
-    navController: NavController
+    navController: NavController,
+    animatedVisibilityScope: AnimatedVisibilityScope?
 ) {
     val context = LocalContext.current
     val listState = rememberLazyGridState()
@@ -103,7 +107,7 @@ fun HomeScreen(
                 items(
                     state.movies
                 ) { movie ->
-                    MovieItem(movie = movie) {
+                    MovieItem(movie = movie, this@HomeScreen, animatedVisibilityScope!!) {
                         navController.navigate(AppRouter.DetailRoute(idMovie = movie.id))
                     }
                 }
@@ -117,7 +121,7 @@ fun HomeScreen(
                             CircularProgressIndicator()
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(
-                                text = "Cargando...",
+                                text = stringResource(id = R.string.loading),
                                 style = TextStyle(fontWeight = FontWeight.SemiBold)
                             )
                         }
@@ -137,41 +141,45 @@ fun HomeScreen(
 private fun HomeScreenPreview() {
 
     SofttekMoviesTheme {
-        HomeScreen(
-            state = HomeState(
-                movies = listOf(
-                    Movie(
-                        id = 1,
-                        title = "Movie 1",
-                        overview = "Overview 1",
-                        posterPath = "https://example.com/poster1.jpg",
-                        voteAverage = 7.5,
-                        releaseDate = "2022-01-01",
-                        page = 2
-                    ),
-                    Movie(
-                        id = 1,
-                        title = "Movie 1",
-                        overview = "Overview 1",
-                        posterPath = "https://example.com/poster1.jpg",
-                        voteAverage = 7.5,
-                        releaseDate = "2022-01-01",
-                        page = 2
-                    ),
-                    Movie(
-                        id = 1,
-                        title = "Movie 1",
-                        overview = "Overview 1",
-                        posterPath = "https://example.com/poster1.jpg",
-                        voteAverage = 7.5,
-                        releaseDate = "2022-01-01",
-                        page = 2
+        SharedTransitionScope {
+            HomeScreen(
+                state = HomeState(
+                    movies = listOf(
+                        Movie(
+                            id = 1,
+                            title = "Movie 1",
+                            overview = "Overview 1",
+                            posterPath = "https://example.com/poster1.jpg",
+                            voteAverage = 7.5,
+                            releaseDate = "2022-01-01",
+                            page = 2
+                        ),
+                        Movie(
+                            id = 1,
+                            title = "Movie 1",
+                            overview = "Overview 1",
+                            posterPath = "https://example.com/poster1.jpg",
+                            voteAverage = 7.5,
+                            releaseDate = "2022-01-01",
+                            page = 2
+                        ),
+                        Movie(
+                            id = 1,
+                            title = "Movie 1",
+                            overview = "Overview 1",
+                            posterPath = "https://example.com/poster1.jpg",
+                            voteAverage = 7.5,
+                            releaseDate = "2022-01-01",
+                            page = 2
+                        )
                     )
-                )
-            ),
-            onEvent = {},
-            navController = rememberNavController()
-        )
+                ),
+                onEvent = {},
+                navController = rememberNavController(),
+                animatedVisibilityScope = null
+            )
+        }
+
     }
 
 }

@@ -1,5 +1,10 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.github.juanncode.softtekmovies.screens.home.components
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,6 +34,8 @@ import kotlin.math.roundToInt
 @Composable
 fun MovieItem(
     movie: Movie,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope?,
     onClickListener: (Long) -> Unit,
 ) {
     Card(
@@ -43,17 +50,19 @@ fun MovieItem(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(movie.posterPath)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .blur(radius = 3.dp),
-                contentScale = ContentScale.Crop
-            )
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(movie.posterPath)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .blur(radius = 3.dp),
+                    contentScale = ContentScale.Crop
+                )
+
+
 
             Box(
                 modifier = Modifier
@@ -76,19 +85,25 @@ fun MovieItem(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(movie.posterPath)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = movie.title,
-                    modifier = Modifier
-                        .height(200.dp)
-                        .width(120.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop
-                )
+                with(sharedTransitionScope) {
 
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(movie.posterPath)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = movie.title,
+                        modifier = Modifier
+                            .height(200.dp)
+                            .width(120.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .sharedElement(
+                                state = rememberSharedContentState(key = "image/${movie.id}"),
+                                animatedVisibilityScope = animatedVisibilityScope!!
+                            ),
+                        contentScale = ContentScale.Crop
+                    )
+                }
                 Text(
                     text = movie.title,
                     style = MaterialTheme.typography.titleLarge,
@@ -149,17 +164,22 @@ fun RatingBar(
 @Composable
 fun MovieItemPreview() {
     MaterialTheme {
-        MovieItem(
-            movie = Movie(
-                id = 1,
-                title = "Spider-Man: Across the Spider-Verse",
-                overview = "Miles Morales returns for the next chapter of the Spider-Verse saga.",
-                posterPath = "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
-                voteAverage = 8.5,
-                releaseDate = "2023-06-01",
-                page = 1
-            ),
-            onClickListener = {}
-        )
+        SharedTransitionScope {
+            MovieItem(
+                movie = Movie(
+                    id = 1,
+                    title = "Spider-Man: Across the Spider-Verse",
+                    overview = "Miles Morales returns for the next chapter of the Spider-Verse saga.",
+                    posterPath = "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
+                    voteAverage = 8.5,
+                    releaseDate = "2023-06-01",
+                    page = 1
+                ),
+                onClickListener = {},
+                sharedTransitionScope = this,
+                animatedVisibilityScope = null
+            )
+        }
+
     }
 }

@@ -1,15 +1,32 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.github.juanncode.softtekmovies.screens.detail.components
 
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -30,6 +47,9 @@ import kotlin.math.roundToInt
 @Composable
 fun MovieDetailItem(
     movie: Movie,
+
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope?
 ) {
     Card(
         modifier = Modifier
@@ -51,6 +71,8 @@ fun MovieDetailItem(
                     .blur(radius = 3.dp),
                 contentScale = ContentScale.Crop
             )
+
+
 
             Box(
                 modifier = Modifier
@@ -74,18 +96,25 @@ fun MovieDetailItem(
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 Spacer(modifier = Modifier.height(20.dp))
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(movie.posterPath)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = movie.title,
-                    modifier = Modifier
-                        .height(400.dp)
-                        .width(320.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop
-                )
+                with(sharedTransitionScope) {
+
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(movie.posterPath)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = movie.title,
+                        modifier = Modifier
+                            .height(400.dp)
+                            .width(320.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .sharedElement(
+                                state = rememberSharedContentState(key = "image/${movie.id}"),
+                                animatedVisibilityScope = animatedVisibilityScope!!
+                            ),
+                        contentScale = ContentScale.Crop
+                    )
+                }
 
                 Text(
                     text = movie.title,
@@ -152,16 +181,21 @@ fun RatingBar(
 @Composable
 fun MovieDetailItemPreview() {
     MaterialTheme {
-        MovieDetailItem(
-            movie = Movie(
-                id = 1,
-                title = "Spider-Man: Across the Spider-Verse",
-                overview = "Miles Morales returns for the next chapter of the Spider-Verse saga.",
-                posterPath = "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
-                voteAverage = 8.5,
-                releaseDate = "2023-06-01",
-                page = 1
-            ),
-        )
+        SharedTransitionScope {
+            MovieDetailItem(
+                movie = Movie(
+                    id = 1,
+                    title = "Spider-Man: Across the Spider-Verse",
+                    overview = "Miles Morales returns for the next chapter of the Spider-Verse saga.",
+                    posterPath = "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
+                    voteAverage = 8.5,
+                    releaseDate = "2023-06-01",
+                    page = 1
+                ),
+                sharedTransitionScope = this,
+                animatedVisibilityScope = null
+            )
+        }
+
     }
 }

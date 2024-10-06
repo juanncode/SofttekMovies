@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.core.splashscreen)
 
     //navigation
