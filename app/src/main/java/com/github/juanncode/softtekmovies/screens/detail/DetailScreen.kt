@@ -10,7 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import com.github.juanncode.softtekmovies.screens.components.GradientBackground
 import com.github.juanncode.softtekmovies.screens.detail.components.MovieDetailItem
-import com.github.juanncode.softtekmovies.screens.home.components.SofttekToolbar
+import com.github.juanncode.softtekmovies.screens.components.SofttekToolbar
 
 @Composable
 fun DetailScreen(

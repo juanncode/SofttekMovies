@@ -2,4 +2,10 @@
     <string name="app_name">SofttekMovies</string>
     <string name="movies_blue">Movies blue</string>
     <string name="go_back">Go back</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+    <string name="welcome_back">Bienvenido a nuestra app de peliculas con soporte offline!</string>
+    <string name="password">Ingrese su password</string>
+    <string name="login">Login</string>
+    <string name="must_be_a_valid_email">Debe agregar un email válido</string>
 </resources>

@@ -15,6 +15,8 @@ import com.github.juanncode.softtekmovies.screens.detail.DetailScreen
 import com.github.juanncode.softtekmovies.screens.detail.DetailViewModel
 import com.github.juanncode.softtekmovies.screens.home.HomeScreen
 import com.github.juanncode.softtekmovies.screens.home.HomeViewModel
+import com.github.juanncode.softtekmovies.screens.login.LoginScreen
+import com.github.juanncode.softtekmovies.screens.login.LoginViewModel
 import com.github.juanncode.softtekmovies.ui.theme.SofttekMoviesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 Surface {
                     NavHost(
                         navController = navController,
-                        startDestination = AppRouter.HomeRoute,
+                        startDestination = AppRouter.LoginRoute,
 
                         ) {
                         composable<AppRouter.HomeRoute> {
@@ -48,6 +50,16 @@ class MainActivity : ComponentActivity() {
                             val viewModel = hiltViewModel<DetailViewModel>()
                             DetailScreen(
                                 idMovie = args.idMovie,
+                                state = viewModel.state,
+                                navController = navController,
+                                onEvent = {
+                                    viewModel.onEvent(it)
+                                }
+                            )
+                        }
+                        composable<AppRouter.LoginRoute> {
+                            val viewModel = hiltViewModel<LoginViewModel>()
+                            LoginScreen(
                                 state = viewModel.state,
                                 navController = navController,
                                 onEvent = {

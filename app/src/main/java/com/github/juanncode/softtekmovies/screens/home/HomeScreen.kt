@@ -39,7 +39,7 @@ import com.github.juanncode.softtekmovies.R
 import com.github.juanncode.softtekmovies.config.AppRouter
 import com.github.juanncode.softtekmovies.screens.components.GradientBackground
 import com.github.juanncode.softtekmovies.screens.home.components.MovieItem
-import com.github.juanncode.softtekmovies.screens.home.components.SofttekToolbar
+import com.github.juanncode.softtekmovies.screens.components.SofttekToolbar
 import com.github.juanncode.softtekmovies.ui.theme.SofttekMoviesTheme
 
 private val columns = 2
@@ -64,7 +64,7 @@ fun HomeScreen(
         if (state.error != null) {
             Toast.makeText(
                 context,
-                state.error.message,
+                state.error.userMessage,
                 Toast.LENGTH_LONG
             ).show()
             onEvent(HomeEvent.CleanError)

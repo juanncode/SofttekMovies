@@ -1,14 +1,12 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.github.juanncode.softtekmovies.screens.home.components
+package com.github.juanncode.softtekmovies.screens.components
 
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.juanncode.softtekmovies.R
+import com.github.juanncode.softtekmovies.ui.theme.ArrowLeftIcon
 import com.github.juanncode.softtekmovies.ui.theme.SofttekMoviesTheme
 
 @Composable
@@ -70,7 +69,7 @@ fun SofttekToolbar(
                     onBackClick()
                 }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = ArrowLeftIcon,
                         contentDescription = stringResource(id = R.string.go_back),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
