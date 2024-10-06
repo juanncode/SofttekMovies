@@ -71,6 +71,7 @@ dependencies {
 
     //hilt
     implementation(libs.hilt)
+    implementation(libs.core.ktx)
     kapt(libs.hilt.compiler)
 
     //serialization
@@ -81,7 +82,11 @@ dependencies {
     implementation(libs.room.runtime)
     kapt(libs.room.compiler)
 
+    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.kotlin)
+    androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
