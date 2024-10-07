@@ -2,6 +2,15 @@
 
 Construye una aplicación de películas con las siguientes funcionalidades:
 
+## Puesta en marcha
+1. Crearse un archivo keys.properties en la raiz del proyecto
+2. Copiar estos valores y colocar tu token de theMovieDb
+  - BASE_URL="https://api.themoviedb.org/3/"
+  - TOKEN_MOVIES="TOKEN"
+3. Credenciales para entrar:
+  - email: example@test.es
+  - password: 123
+
 ## Funcionalidades
 
 ### 1. Pantalla de Login
