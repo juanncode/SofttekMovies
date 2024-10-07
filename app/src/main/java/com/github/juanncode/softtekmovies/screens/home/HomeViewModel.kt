@@ -1,72 +1,86 @@
 
 package com.github.juanncode.softtekmovies.screens.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.juanncode.domain.repository.MovieRepository
+import com.github.juanncode.domain.usescase.FetchNewMoviesUseCase
+import com.github.juanncode.domain.usescase.GetMoviesFlowUseCase
+import com.github.juanncode.domain.usescase.IsMovieEmptyUseCase
+import com.github.juanncode.domain.usescase.RefreshMoviesUseCase
 import com.github.juanncode.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: MovieRepository
+    private val isMovieEmptyUseCase: IsMovieEmptyUseCase,
+    private val refreshMoviesUseCase: RefreshMoviesUseCase,
+    private val fetchNewMoviesUseCase: FetchNewMoviesUseCase,
+    private val getMoviesFlowUseCase: GetMoviesFlowUseCase,
 ): ViewModel() {
 
-    var state by mutableStateOf(HomeState())
-        private set
+    var _state =  MutableStateFlow(HomeState())
+    val state: StateFlow<HomeState> = _state.asStateFlow()
 
-    init {
+//    init {
+//        getMoviesFlow()
+//        validateFetchMovies()
+//    }
 
-        repository.getMoviesFlow().onEach { movies ->
-            state = state.copy(movies = movies)
-        }.launchIn(viewModelScope)
-
+    fun validateFetchMovies() {
         viewModelScope.launch {
-            if (withContext(Dispatchers.IO){repository.isMoviesEmpty()}) {
+            if (isMovieEmptyUseCase()) {
                 fetchMovies()
             }
         }
     }
 
+    fun getMoviesFlow() {
+        getMoviesFlowUseCase().onEach { movies ->
+            _state.value = _state.value.copy(movies = movies)
+        }.launchIn(viewModelScope)
+    }
+
     fun onEvent(event: HomeEvent) {
         when (event) {
-            HomeEvent.CleanError -> state = state.copy(error = null)
+            HomeEvent.CleanError -> _state.value = _state.value.copy(error = null)
             HomeEvent.GetNewMovies -> fetchMovies()
             HomeEvent.RefreshMovies -> refreshMovies()
+            HomeEvent.InitialValues -> {
+                getMoviesFlow()
+                validateFetchMovies()
+            }
         }
     }
 
     private fun refreshMovies() {
         viewModelScope.launch {
-            state = state.copy(loading = true)
+            _state.value = _state.value.copy(loading = true)
             delay(500)
-            val response = withContext(Dispatchers.IO) {repository.refreshMovies()}
-            state = state.copy(loading = false)
+            val response = refreshMoviesUseCase()
+            _state.value = _state.value.copy(loading = false)
             if (response is Resource.Error) {
-                state = state.copy(error = response.error)
+                _state.value = _state.value.copy(error = response.error)
             }
         }
     }
 
-    private fun fetchMovies() {
+    fun fetchMovies() {
         viewModelScope.launch {
-            state = state.copy(loading = true)
+            _state.value = _state.value.copy(loading = true)
             delay(500)
-            val response = withContext(Dispatchers.IO) {repository.fetchMovies()}
-            state = state.copy(loading = false)
+            val response = fetchNewMoviesUseCase()
+            _state.value = _state.value.copy(loading = false)
             if (response is Resource.Error) {
-                state = state.copy(error = response.error)
+                _state.value = _state.value.copy(error = response.error)
             }
         }
     }

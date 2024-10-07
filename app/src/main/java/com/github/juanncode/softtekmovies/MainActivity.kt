@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -44,8 +45,9 @@ class MainActivity : ComponentActivity() {
                             ) {
                             composable<AppRouter.HomeRoute> {
                                 val viewModel = hiltViewModel<HomeViewModel>()
+                                val state = viewModel.state.collectAsState().value
                                 HomeScreen(
-                                    state = viewModel.state,
+                                    state = state,
                                     onEvent = {
                                         viewModel.onEvent(it)
                                     },

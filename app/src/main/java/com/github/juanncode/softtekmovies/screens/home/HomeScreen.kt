@@ -64,6 +64,10 @@ fun SharedTransitionScope.HomeScreen(
         }
     }
 
+    LaunchedEffect(key1 = true) {
+        onEvent(HomeEvent.InitialValues)
+    }
+
     LaunchedEffect(key1 = state.error) {
         if (state.error != null) {
             Toast.makeText(

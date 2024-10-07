@@ -31,7 +31,7 @@ roomPaging = "2.6.1"
 testCore = "1.6.1"
 coreKtxVersion = "1.6.1"
 mockk = "1.13.12"
-
+turbineVersion = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -79,6 +79,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-paging = { module = "androidx.room:room-paging", version.ref = "roomPaging" }
 
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbineVersion"}
 mockito-kotlin = { group = "org.mockito.kotlin", name= "mockito-kotlin", version.ref = "mockitoKotlin" }
 mockk-kotlin = { group = "io.mockk", name= "mockk", version.ref = "mockk" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

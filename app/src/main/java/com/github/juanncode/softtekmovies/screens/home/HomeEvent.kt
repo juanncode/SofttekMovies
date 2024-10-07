@@ -4,4 +4,5 @@ sealed interface HomeEvent {
     data object CleanError: HomeEvent
     data object GetNewMovies: HomeEvent
     data object RefreshMovies: HomeEvent
+    data object InitialValues: HomeEvent
 }

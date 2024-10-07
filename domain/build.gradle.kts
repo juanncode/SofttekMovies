@@ -9,6 +9,7 @@ java {
 }
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.inject.javax)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.junit)
     
