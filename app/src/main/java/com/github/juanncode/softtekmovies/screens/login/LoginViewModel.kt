@@ -30,8 +30,6 @@ class LoginViewModel @Inject constructor(
         snapshotFlow {
             state.password.text
         }.onEach { password ->
-            println(password)
-            println(state.email)
             val isValidPassword = userDataValidator.isValidPassword(password.toString())
             val isValidEmail = userDataValidator.isValidEmail(state.email.text.toString())
             state = state.copy(

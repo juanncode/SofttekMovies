@@ -9,7 +9,11 @@ import com.github.juanncode.softtekmovies.screens.CoroutinesTestRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,9 +50,10 @@ class LoginViewModelTest {
     fun `Password validation is triggered when password is modified`() = runTest {
         val validPassword = "password123"
         whenever(userDataValidator.isValidPassword(validPassword)).thenReturn(true)
-
         viewModel.validatePassword()
+
         viewModel.state = viewModel.state.copy(password = TextFieldState(validPassword))
+        advanceUntilIdle()
 
         assertTrue(viewModel.state.isPasswordValid)
     }

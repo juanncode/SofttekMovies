@@ -13,7 +13,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 
 class SafeApiCallKtTest {

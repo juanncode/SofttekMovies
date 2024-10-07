@@ -27,13 +27,9 @@ class HomeViewModel @Inject constructor(
     private val getMoviesFlowUseCase: GetMoviesFlowUseCase,
 ): ViewModel() {
 
-    var _state =  MutableStateFlow(HomeState())
+    private var _state =  MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
 
-//    init {
-//        getMoviesFlow()
-//        validateFetchMovies()
-//    }
 
     fun validateFetchMovies() {
         viewModelScope.launch {

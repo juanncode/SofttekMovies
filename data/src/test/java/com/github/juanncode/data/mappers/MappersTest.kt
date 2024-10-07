@@ -2,8 +2,7 @@ package com.github.juanncode.data.mappers
 
 import com.github.juanncode.data.MovieEntityMock
 import com.github.juanncode.data.MovieRemoteMock
-import com.github.juanncode.data.datasource.remote.model.MovieRemote
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class MappersTest {

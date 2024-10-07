@@ -2,7 +2,6 @@ package com.github.juanncode.data.repository
 
 import com.github.juanncode.data.MovieEntityMock
 import com.github.juanncode.data.MovieRemoteMock
-import com.github.juanncode.data.database.MovieEntity
 import com.github.juanncode.data.datasource.local.LocalDatasource
 import com.github.juanncode.data.datasource.remote.RemoteDataSource
 import com.github.juanncode.data.mappers.toDomain
